@@ -5,10 +5,11 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Sun Dec 22 12:56:00 2013 Sebastien Chapuis
-** Last update Fri Jan 10 23:11:26 2014 sebastien
+** Last update Sun Jan 12 17:12:27 2014 sebastien
 */
 
 #include <unistd.h>
+#include "wolf.h"
 
 int		my_puterror(char *str)
 {
@@ -16,10 +17,10 @@ int		my_puterror(char *str)
 
   i = 0;
   if (str == NULL)
-    return (-1);
+    return (FAILED);
   while (str[i])
     write(2, &str[i++], 1);
-  return (-1);
+  return (FAILED);
 }
 
 void		my_putstr(char *str)

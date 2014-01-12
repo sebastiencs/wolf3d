@@ -5,10 +5,9 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Fri Jan 10 19:01:52 2014 sebastien
-** Last update Fri Jan 10 20:12:20 2014 sebastien
+** Last update Sun Jan 12 14:42:34 2014 sebastien
 */
 
-#include <X11/X.h>
 #include <stdlib.h>
 #include <math.h>
 #include "mlx.h"
@@ -83,13 +82,16 @@ float	find_wall(t_env *env , int **map, float each_x, unsigned int *color)
   x1 = env->x + 0.5;
   y1 = env->y + each_x;
   tmp = x1;
-  x1 = cos(RAD(env->angle)) * (tmp - env->x) - sin(RAD(env->angle)) * (y1 - env->y);
-  y1 = sin(RAD(env->angle)) * (tmp - env->x) + cos(RAD(env->angle)) * (y1 - env->y);
+  x1 = cos(RAD(env->angle)) * (tmp - env->x) - sin(RAD(env->angle))
+    * (y1 - env->y);
+  y1 = sin(RAD(env->angle)) * (tmp - env->x) + cos(RAD(env->angle))
+    * (y1 - env->y);
   k_x = find_x(env, map, x1, y1);
   k_y = find_y(env, map, x1, y1);
   *color = 0;
-  (x1 > 0) ? (*color = 0x33CCCC) : (*color = 0x3333CC);
-  (k_x > k_y) ? ((y1 > 0) ? (*color = 0x990033) : (*color = 0xCC6666)) : (0);
+  (x1 > 0) ? (*color = FIRST_COLOR) : (*color = SECOND_COLOR);
+  (k_x > k_y) ? ((y1 > 0) ? (*color = THIRD_COLOR)
+		 : (*color = FOURTH_COLOR)) : (0);
   if (k_x > k_y)
     return (k_y);
   return (k_x);

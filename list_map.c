@@ -5,7 +5,7 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Tue Dec 31 13:46:59 2013 Sebastien Chapuis
-** Last update Fri Jan 10 23:09:07 2014 sebastien
+** Last update Sun Jan 12 13:06:32 2014 sebastien
 */
 
 #include <stdlib.h>
@@ -40,7 +40,8 @@ int		push_map(t_map **map, char *str, int line)
   else
     if ((*map = create_elem(str, line)))
       return (0);
-  return (-1);
+  my_puterror(ALLOC_ERROR);
+  return (FAILED);
 }
 
 void		free_list(t_map *list)

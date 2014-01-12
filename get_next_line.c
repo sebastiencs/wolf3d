@@ -5,17 +5,17 @@
 ** Login   <chapui_s@epitech.net>
 **
 ** Started on  Wed Nov 20 21:02:19 2013 chapui_s
-** Last update Tue Dec 31 13:41:00 2013 Sebastien Chapuis
+** Last update Sun Jan 12 17:51:55 2014 sebastien
 */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include "get_next_line.h"
 
-t_fd	*find_fd_or_create_it(t_fd **pile_fd, int fd)
+static t_fd	*find_fd_or_create_it(t_fd **pile_fd, int fd)
 {
-  t_fd	*tmp;
-  t_fd	*new;
+  t_fd		*tmp;
+  t_fd		*new;
 
   tmp = *pile_fd;
   if (tmp && tmp->fd == fd)
@@ -37,13 +37,13 @@ t_fd	*find_fd_or_create_it(t_fd **pile_fd, int fd)
     tmp->next = new;
   }
   else
-    new->next = new;;
+    new->next = new;
   return (new);
 }
 
-int	is_backslash_n(char *str)
+static int	is_backslash_n(char *str)
 {
-  int	i;
+  int		i;
 
   i = 0;
   if (str == NULL)
@@ -57,12 +57,12 @@ int	is_backslash_n(char *str)
   return (0);
 }
 
-int	add_str_to(char **dest, char *src)
+static int	add_str_to(char **dest, char *src)
 {
-  char	*tmp;
-  char	*tmp2;
-  int	i;
-  int	j;
+  char		*tmp;
+  char		*tmp2;
+  int		i;
+  int		j;
 
   i = 0;
   j = 0;
@@ -86,11 +86,11 @@ int	add_str_to(char **dest, char *src)
   return (0);
 }
 
-char	*return_it(char **str, char **to_return)
+static char	*return_it(char **str, char **to_return)
 {
-  int	i;
-  int	j;
-  char	*new_str;
+  int		i;
+  int		j;
+  char		*new_str;
 
   i = 0;
   j = 0;
@@ -124,16 +124,16 @@ char		*get_next_line(const int fd)
 
   if ((pile = find_fd_or_create_it(&pile, fd)) == NULL || BUF_SIZE <= 0)
     return (NULL);
-  if ((str_tmp = (char*)malloc(sizeof(char) * (BUF_SIZE + 1))) == NULL)
+  if ((str_tmp = (char*)malloc(sizeof(char) * (BUF_SIZE + 2))) == NULL)
     return (NULL);
   while (is_backslash_n(pile->str) == 0)
   {
     if ((s_read = read(fd, str_tmp, BUF_SIZE)) < 0)
       return (NULL);
     (s_read < BUF_SIZE) ? (str_tmp[s_read] = 0) : (0);
-    if (s_read < BUF_SIZE && str_tmp[s_read - 1] != '\n')
+    if (s_read < BUF_SIZE && str_tmp[CHECK_GNL(s_read)] != '\n')
       str_tmp[s_read] = '\n';
-    if (s_read < BUF_SIZE && str_tmp[s_read - 1] != '\n')
+    if (s_read < BUF_SIZE && str_tmp[CHECK_GNL(s_read)] != '\n')
       str_tmp[s_read + 1] = 0;
     if (((add_str_to(&(pile->str), str_tmp)) > 0)
 	|| (s_read == 0 && pile->str[0] == '\n'))

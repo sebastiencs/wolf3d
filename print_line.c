@@ -5,7 +5,7 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Sun Dec 22 12:54:29 2013 Sebastien Chapuis
-** Last update Fri Jan 10 23:06:23 2014 sebastien
+** Last update Sun Jan 12 14:47:48 2014 sebastien
 */
 
 #include <stddef.h>
@@ -23,8 +23,9 @@ t_line		get_coord(int x1, int y1, int x2, int y2)
   return (coord);
 }
 
-static void		my_pixel_put_to_image(int x, int y, unsigned int color,
-				      t_infos_mlx *infos_mlx)
+static void		my_pixel_put_to_image(int x, int y,
+					      unsigned int color,
+					      t_infos_mlx *infos_mlx)
 {
   void		*mlx_ptr;
   size_t	pixel_ptr;
@@ -53,7 +54,7 @@ void	print_line(t_line c, t_infos_mlx *infos_mlx, unsigned int color)
 {
   int	tmp;
 
-  if (transform_coord(&c) == -1)
+  if (transform_coord(&c) == FAILED)
     return ;
   if ((c.x1 <= c.x2) && ((c.x2 - c.x1) >= val_abs(c.y2 - c.y1)))
   {
@@ -75,4 +76,13 @@ void	print_line(t_line c, t_infos_mlx *infos_mlx, unsigned int color)
 			  / (c.y2 - c.y1), tmp, color, infos_mlx);
     tmp = tmp + 1;
   }
+}
+
+int	transform_coord(t_line *c)
+{
+  if (c->x1 == c->x2 && c->y1 == c->y2)
+    return (FAILED);
+  (c->x1 > c->x2) ? (swap_int(&(c->y1), &(c->y2))) : (0);
+  (c->x1 > c->x2) ? (swap_int(&(c->x1), &(c->x2))) : (0);
+  return (0);
 }

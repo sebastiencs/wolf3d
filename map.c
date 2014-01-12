@@ -5,7 +5,7 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Tue Dec 31 13:39:14 2013 Sebastien Chapuis
-** Last update Fri Jan 10 23:08:02 2014 sebastien
+** Last update Sun Jan 12 18:21:37 2014 sebastien
 */
 
 #include <stdlib.h>
@@ -13,8 +13,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "wolf.h"
-
-#include <stdio.h>
 
 static int	check_first_last(char *str)
 {
@@ -26,12 +24,12 @@ static int	check_first_last(char *str)
     if (!(i % 2) && str[i] != '1')
     {
       my_puterror("First and last line must be completed with '1'\n");
-      return (-1);
+      return (FAILED);
     }
     if (i % 2 && str[i] != ' ')
     {
       my_puterror("error: caracter must be '0', ' ' or '1'\n");
-      return (-1);
+      return (FAILED);
     }
 
     i = i + 1;
@@ -39,16 +37,17 @@ static int	check_first_last(char *str)
   return (0);
 }
 
-
 static int	check_map(t_map *list_map)
 {
   t_map		*tmp;
   unsigned int	nb_col;
 
   tmp = list_map;
+  if (list_map == NULL)
+    return (my_puterror(MAP_ERROR));
   nb_col = my_strlen(list_map->str);
-  if (check_first_last(list_map->str) == -1)
-    return (-1);
+  if (check_first_last(list_map->str) == FAILED)
+    return (FAILED);
   while (tmp)
   {
     if (tmp->str[0] == '0' || tmp->str[0] == ' '
@@ -61,14 +60,14 @@ static int	check_map(t_map *list_map)
   return (0);
 }
 
-int		**save_map(t_map *list_map, int nb_line, int nb_col, int i)
+static int	**save_map(t_map *list_map, int nb_line, int nb_col, int i)
 {
   int		**map;
   t_map		*tmp;
   int		j;
   int		z;
 
-  if ((map = (int**)malloc(sizeof(int*) * (nb_line))) == NULL)
+  if ((map = (int**)malloc(sizeof(int*) * (nb_line + 1))) == NULL)
     return (NULL);
   tmp = list_map;
   while (tmp)
@@ -86,10 +85,11 @@ int		**save_map(t_map *list_map, int nb_line, int nb_col, int i)
     i = i + 1;
     tmp = tmp->next;
   }
+  map[i] = NULL;
   return (map);
 }
 
-int		get_nb_line(t_map *list)
+static int	get_nb_line(t_map *list)
 {
   int		i;
   t_map		*tmp;
@@ -114,21 +114,21 @@ int		**get_map(char *filename, t_env *env)
 
   i = 0;
   list_map = NULL;
-  if ((fd = open(filename, O_RDONLY)) == -1)
+  if ((fd = open(filename, O_RDONLY)) == FAILED)
   {
-    my_puterror("can't open file\n");
+    my_puterror(FILE_ERROR);
     return (NULL);
   }
   while ((tmp = get_next_line(fd)))
-    if ((push_map(&list_map, tmp, i++)) == -1)
+    if ((push_map(&list_map, tmp, i++)) == FAILED)
       return (NULL);
-  if (check_map(list_map) == -1)
+  if (check_map(list_map) == FAILED)
     return (NULL);
-  map = save_map(list_map, i, (my_strlen(list_map->str) + 1) / 2, 0);
+  if ((map = save_map(list_map, i, (my_strlen(list_map->str) + 1) / 2, 0))
+      == NULL)
+    my_puterror(ALLOC_ERROR);
   env->size_x = (my_strlen(list_map->str) + 1) / 2;
   env->size_y = get_nb_line(list_map);
-  env->x = 0;
-  env->y = 0;
   free_list(list_map);
   return (map);
 }
