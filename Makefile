@@ -5,7 +5,7 @@
 ## Login   <sebastien@epitech.net>
 ## 
 ## Started on  Sun Dec 22 12:34:46 2013 Sebastien Chapuis
-## Last update Sun Jan 12 18:04:55 2014 sebastien
+## Last update Tue Feb 25 21:00:33 2014 chapui_s
 ##
 
 NAME	= wolf3d
@@ -27,7 +27,7 @@ SRC	= main.c \
 
 OBJ	= $(SRC:.c=.o)
 
-CFLAGS  = -L/usr/lib64 -lmlx_$(HOSTTYPE) -L/usr/lib64/X11 -lXext -lX11 -I /usr/include/X11/ -lm
+CFLAGS  = -L/usr/lib64 -lmlx -lXext -lX11 -I /usr/include/X11/ -lm
 
 CC	= gcc
 
